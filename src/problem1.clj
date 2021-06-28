@@ -5,10 +5,13 @@
 (->> c (+ 3) (/ 2) (- 1))
 
 
-(defn searcher [{items :invoice/items}]
-  (filter
-    #(contains? % :taxable/taxes)
-    items))
 
+(defn filterTaxableTaxes [{items :invoice/items}]
+  (filter #(contains? % :taxable/taxes)
+  items))
 
-(searcher invoice)
+(defn filterByRate [taxes]
+  (filter #(= (get (nth (get % :taxable/taxes) 0) :tax/rate ) 19) taxes)
+  )
+
+(filterByRate (searcher invoice))
