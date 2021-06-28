@@ -6,10 +6,9 @@
 
 
 (defn searcher [{items :invoice/items}]
-  (doseq [single-item items]
-    (doseq [tax (->> single-item (:taxable/taxes))]
-      (->> tax (:tax/rate) (< 19))
-    )))
+  (filter
+    #(contains? % :taxable/taxes)
+    items))
 
 
 (searcher invoice)
