@@ -10,3 +10,10 @@
     :or                {discount-rate 0}}]
   (* precise-price precise-quantity (discount-factor item)))
 
+
+
+(deftest first-test
+    (is (subtotal ))
+    ()
+    ())
+
