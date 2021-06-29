@@ -10,10 +10,19 @@
   )
 
 
-(defn filterByRetentions [{items :invoice/items}]
+(defn filterByRetentionRate [{items :invoice/items}]
   (->> items (filter #(contains? % :retentionable/retentions))
        (filter #(= (get (nth (get % :retentionable/retentions) 0) :retention/rate) 1)))
   )
 
-(filterByRetentions invoice)
-(filterByTaxRate invoice)
+(defn SymmetricDifference  [s1 s2]
+  (let [s1 (set s1) s2 (set s2)]
+   (into (clojure.set/difference s1 s2) (clojure.set/difference s2 s1))))
+
+(defn Main [invoice]
+  (let [retention (filterByRetentionRate invoice) taxRate (filterByTaxRate invoice)]
+    (SymmetricDifference taxRate retention)
+    )
+  )
+
+(Main invoice)
