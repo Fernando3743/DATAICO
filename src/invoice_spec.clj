@@ -1,6 +1,6 @@
 (ns invoice-spec
   (:require
-    [clojure.spec.alpha :as s] [clojure.data.json :as j] ))
+    [clojure.spec.alpha :as s] [clojure.data.json :as j]))
 
 (s/def :customer/name string?)
 (s/def :customer/email string?)
@@ -31,7 +31,4 @@
                 :invoice/customer
                 :invoice/items]))
 
-
-(def invoice (j/read-str (slurp "src/invoice.json") :key-fn keyword))
-
-(s/explain ::invoice invoice)
+(load "problem2")
