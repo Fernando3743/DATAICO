@@ -12,8 +12,3 @@
 
 
 
-(deftest first-test
-    (is (subtotal ))
-    ()
-    ())
-
