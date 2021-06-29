@@ -6,13 +6,14 @@
 
 (defn filterByTaxRate [{items :invoice/items}]
   (->> items (filter #(contains? % :taxable/taxes))
-       (filter #(= (get (nth (get % :taxable/taxes) 0) :tax/rate ) 19)))
+       (filter #(= (get (nth (get % :taxable/taxes) 0) :tax/rate) 19)))
   )
 
-(defn filterRetentions [{items :invoice/items}]
-  (filter #(contains? % :retentionable/retentions)
-          items))
 
-(filterByTaxRate invoice)
+(defn filterByRetentions [{items :invoice/items}]
+  (->> items (filter #(contains? % :retentionable/retentions))
+       (filter #(= (get (nth (get % :retentionable/retentions) 0) :retention/rate) 1)))
+  )
 
+(filterByRetentions invoice)
 (filterByTaxRate invoice)
