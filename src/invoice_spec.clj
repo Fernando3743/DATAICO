@@ -31,4 +31,6 @@
                 :invoice/customer
                 :invoice/items]))
 
+;; Run this file before running problem2.clj, this file loads its dependencies
+
 (load "problem2")

@@ -1,20 +1,37 @@
 (in-ns 'invoice-spec)
+(use 'clojure.walk)
 
 (defn my-value-reader [key value]
-  (if (re-find #"date" (str key))
-    (.parse
-      (java.text.SimpleDateFormat. "dd/MM/yyyy")
-      value)
-    value))
+  (case key
+    :issue_date (.parse
+                  (java.text.SimpleDateFormat. "dd/MM/yyyy")
+                  value)
+    :payment_date (.parse
+                    (java.text.SimpleDateFormat. "dd/MM/yyyy")
+                    value)
+    :tax_category :iva
+    :tax_rate (double value)
+    value)
+  )
 
-(defn my-key-reader [key]
-  (if (re-find #"company_name" (str key))
-    :name
-    (keyword key)))
+(defn jsonFormatter [filename]
+  (let [jsonFile (j/read-str (slurp filename)
+                             :key-fn keyword
+                             :value-fn my-value-reader)]
+    (->> (postwalk-replace {
+                       :issue_date      :invoice/issue-date
+                       :customer        :invoice/customer
+                       :items           :invoice/items
+                       :company_name    :customer/name
+                       :email           :customer/email
+                       :price           :invoice-item/price
+                       :quantity        :invoice-item/quantity
+                       :sku             :invoice-item/sku
+                       :taxes           :invoice-item/taxes
+                       :tax_category    :tax/category
+                       :tax_rate        :tax/rate
+                       } jsonFile) (:invoice)))
+  )
 
-(def invoice (j/read-str (slurp "src/invoice.json")
-                         :key-fn my-key-reader
-                         :value-fn my-value-reader))
-
-(identity invoice)
-(s/explain ::invoice testing)
+(s/valid? ::invoice (jsonFormatter "src/invoice.json"))
+;; => true
