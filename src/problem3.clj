@@ -1,3 +1,0 @@
-(in-ns 'invoice-item)
-
-

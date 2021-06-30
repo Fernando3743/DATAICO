@@ -71,7 +71,7 @@
     )
 
 
-(deftest ceroAmountItems
+(deftest ceroQuantityItems
   (let [item1 (Item 11 0 15.99 25)
         item2 (Item 12 0 20.99 33)
         item3 (Item 13 0 3.25 10)]
